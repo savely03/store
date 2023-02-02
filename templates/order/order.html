@@ -1,0 +1,59 @@
+{% extends "products/base.html" %}
+{% load static %}
+
+
+
+
+{% block title %}
+
+{% endblock %}
+
+
+<!-- Custom styles for this template -->
+{% block css %}
+    <link href="{% static "vendor/css/orders.css" %}" rel=" stylesheet">
+{% endblock %}
+
+
+{% block content %}
+    <section>
+        <div class="container pt-5">
+            <div class="text-center mt-5">
+                <h1>Заказ #{{ order.id }}</h1>
+                <div class="orders mt-5">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Название</th>
+                            <th scope="col">Кол-во</th>
+                            <th scope="col">Цена</th>
+                            <th scope="col">Сумма</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in cart %}
+                            <tr>
+                                <th scope="row">
+                                    {{ item.product.name }}
+                                </th>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.price }} руб.</td>
+                                <td>{{ item.total_price }} руб.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <p class="float-right h4 mt-3">Итого: {{ total }} руб. </p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <a href="{% url "cart_detail" %}">
+                            <button type="button" class="btn btn-danger float-md-left h4 mt-3">Отмена</button>
+                        </a>
+                        <button type="submit" class="btn btn-success float-right h4 mt-3">Оформить заказ</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+

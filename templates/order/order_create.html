@@ -1,0 +1,102 @@
+{% extends "products/base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+{% block title %}
+    Оформление заказа
+{% endblock %}
+
+<!-- Custom styles for this template -->
+{% block css %}
+    <link href="{% static "vendor/css/orders.css" %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+    <section>
+        <div class="alert alert-warning text-center" role="alert">
+            Пожалуйста, заполните адрес электронной почты.
+        </div>
+        <div class="container">
+            <div class="py-5 text-center">
+                <h1>Оформление заказа</h1>
+            </div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="alert alert-primary" role="alert">
+                                <h4>{{ message }}</h4>
+                                <a href="{% url "order_create" %}">
+                                    <button type="button" class="btn btn-primary">Закрыть</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="row g-5">
+                <div class="col-md-5 col-lg-4 order-md-last">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-primary">Корзина</span>
+                        <span class="badge badge-primary badge-pill text-white">{{ cart.get_count }}</span>
+                    </h4>
+                    <ul class="list-group mb-3  ">
+                        {% for item in cart %}
+                            <li class="list-group-item d-flex justify-content-between lh-sm">
+                                <div>
+                                    <h6 class="my-0">{{ item.product.name }}
+                                    </h6>
+                                    <small class="text-muted">{{ item.quantity }} шт.</small>
+                                    <a href="{% url "cart_remove" product_id=item.product.id %}">
+                                        <button type="button" class="btn btn-danger btn-sm">Удалить</button>
+                                    </a>
+                                </div>
+                                <span class="text-muted">{{ item.product.price }} руб.</span>
+                            </li>
+                        {% endfor %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Сумма к оплате</span>
+                            <strong>{{ sm }} руб.</strong>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-7 col-lg-8">
+                    <h4 class="mb-3">Адрес доставки</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label for="firstName" class="form-label">Имя</label>
+                                {% render_field form.first_name class="form-control" type="text" id="firstName" placeholder="Иван" %}
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="lastName" class="form-label">Фамилия</label>
+                                {% render_field form.last_name class="form-control" type="text" id="lastName" placeholder="Иванов" %}
+                            </div>
+
+                            <div class="col-12 mt-3">
+                                <label for="email" class="form-label">Адрес электронной почты</label>
+                                {% render_field form.email class="form-control" id="email" placeholder="you@example.com" %}
+                            </div>
+
+                            <div class="col-12 mt-3">
+                                <label for="address" class="form-label">Адрес</label>
+                                {% render_field form.address class="form-control" type="text" id="address" placeholder="Россия, Москва, ул. Мира, дом 6" %}
+                            </div>
+
+                        </div>
+                        <hr class="my-4">
+                        <button class="w-100 btn btn-primary btn-lg" type="submit">Продолжить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'products/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Store - Изменение продукта
+{% endblock %}
+
+
+{% block css %}
+    <link href="{% static "vendor/css/profile.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    {#<body class="bg-light">#}
+    {#<!-- Navigation -->#}
+    {% if messages %}
+        <br>
+        <div class="container">
+            {% for message in messages %}
+                <div class="container-fluid p-0">
+                    <h6 class="text {{ message.tags }}">{{ message }}
+                        <a href="{% url "products" %}">Вернуться к товарам</a>
+                    </h6>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="container">
+        <h4 class="mt-3 mb-3">Изменение товара "{{ product.name }}"</h4>
+        <div class="row">
+            <div class="col-lg-7">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="small mb-1" for="inputFirstName">Название</label>
+                                {% render_field form.name class="form-control py-4" type="text" id="inputFirstName" %}
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="small mb-1" for="category">Категория
+                            </label>
+                            {% render_field form.category class="form-check  py-4" id="category" %}
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="small mb-1" for="description">Описание</label>
+                                {% render_field form.description class="form-control py-4" type="text" id="description" %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-4">
+                            <label class="small mb-1" for="price">Цена</label>
+                            {% render_field form.price class="form-control py-4" id="price" %}
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="small mb-1" for="quantity">Количество</label>
+                            {% render_field form.quantity class="form-control py-4" id="quantity" %}
+                        </div>
+                        <div class="col-lg-4">
+                            {{ form.image }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-6" style="margin-top: 33px;">
+                            <input class="btn btn-info btn-block" type="submit" value="Сохранить">
+                        </div>
+                        <div class="col-lg-6" style="margin-top: 33px;">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal">
+                                Удалить товар
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Удаление товара</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Вы действительно хотите удалить данный товар? <p>(Товар удалится навсегда)</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Закрыть</button>
+                                <a href="{% url "confirm_delete" pk=product.pk %}">
+                                    <button type="button" class="btn btn-danger">Удалить</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

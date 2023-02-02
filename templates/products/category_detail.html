@@ -1,0 +1,79 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block title %}
+    Store - {{ category.name }}
+{% endblock %}
+
+{% block css %}
+    <link href="{% static "vendor/css/index.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <!-- Page Content -->
+    <br>
+    <div class="container">
+        {% if products %}
+            <div class="row">
+
+            <div class="col-lg-3">
+
+                <h1 class="my-4">Store</h1>
+                <div class="list-group">
+                    {% for category in categories %}
+                        <a href="{% url "category_detail" pk=category.pk %}"
+                           class="list-group-item{% if category.pk == pk %} active {% endif %}">{{ category.name }}</a>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <!-- /.col-lg-3 -->
+            <div class="col-lg-9">
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100">
+                            <a href="{% url "product_detail" pk=product.pk %}">
+                                <img class="card-img-top"
+                                     src={{ product.image.url }}
+                                             alt="">
+                            </a>
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    <a href="{% url "product_detail" pk=product.pk %}">{{ product.name }}</a>
+                                </h4>
+                                <h5>{{ product.price }} руб.</h5>
+                            </div>
+                            <div class="card-footer text-center">
+                                <form method="post" action="{% url "cart_add" product_id=product.id %}">
+                                    {% csrf_token %}
+                                    {{ cart_product_form.as_p }}
+                                    <button type="submit" class="btn btn-outline-success">
+                                        Отправить в корзину
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% if page.paginator.page_range|length >= 2 %}
+                {% include "includes/paginator.html" %}
+            {% endif %}
+        {% endif %}
+        </div>
+        </div>
+    </div>
+    <!-- /.container -->
+
+    {% if products %}
+        <!-- Footer -->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <p class="m-0 text-center text-white">Copyright &copy; Store 2022</p>
+            </div>
+            <!-- /.container -->
+        </footer>
+    {% endif %}
+
+{% endblock %}

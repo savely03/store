@@ -1,0 +1,76 @@
+{% extends "products/base.html" %}
+
+
+{% block title %}
+    Корзина
+{% endblock %}
+
+{% block content %}
+    <br>
+    <br>
+    <br>
+    <div class="container-fluid">
+        <h2>Корзина</h2>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Фото</th>
+            <th scope="col">Товар</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Удалить</th>
+            <th scope="col">Цена</th>
+            <th scope="col">Суммарная стоимость</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in cart %}
+            <tr>
+                <th>
+                    <img width="150" height="150" alt="No image"
+                         src="{% if item.product.image %}{{ item.product.image.url }}{% endif %}">
+                </th>
+                <th><a href="{% url "product_detail" pk=item.product.pk %}">{{ item.product.name }}</a></th>
+                <th>
+                    <h4>
+                        <a class="text-danger" href="{% url "cart_decrease" product_id=item.product.id %}">-</a>
+                        {{ item.quantity }}
+                        {% if item.quantity < item.product.quantity %}
+                            <a class="text-success" href="{% url "cart_add" product_id=item.product.id %}">+</a>
+                        {% endif %}
+                    </h4>
+                </th>
+                <th>
+                    <a href="{% url "cart_remove" product_id=item.product.id %}">
+                        <button type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </a>
+                </th>
+                <th>{{ item.price }} руб.</th>
+                <th>{{ item.total_price }} руб.</th>
+            </tr>
+        {% endfor %}
+        {% if cart|length %}
+            <tr>
+                <td><h6>Итого:</h6></td>
+                <td colspan="3"></td>
+                <td><h6>{{ cart.get_total_price }} руб.</h6></td>
+
+            </tr>
+            <tr>
+                <td><h6>Покупка:</h6></td>
+                <td><a href="{% url "cart_clear" %}">
+                    <button type="button" class="btn btn-secondary">Очистить корзину</button>
+                </a></td>
+                <td colspan="2"></td>
+                <td>
+                    <a href="{% url "order_create" %}">
+                        <button type="button" class="btn btn-success">Заказать</button>
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

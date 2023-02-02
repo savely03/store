@@ -1,0 +1,54 @@
+{% extends "products/base.html" %}
+{% load static %}
+
+
+
+
+{% block title %}
+
+{% endblock %}
+
+
+<!-- Custom styles for this template -->
+{% block css %}
+    <link href="{% static "vendor/css/orders.css" %}" rel=" stylesheet">
+{% endblock %}
+
+
+{% block content %}
+    <section>
+        <div class="container pt-5">
+            <div class="text-center mt-5">
+                <h1>Заказ #{{ order_id }}</h1>
+                <div class="orders mt-5">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Название</th>
+                            <th scope="col">Статус</th>
+                            <th scope="col">Кол-во</th>
+                            <th scope="col">Цена</th>
+                            <th scope="col">Сумма (руб.)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for order in orders %}
+                            <tr>
+                                <th scope="row">
+                                    <a href="{% url "product_detail" pk=order.product.pk %}">{{ order.product }}</a>
+                                </th>
+                                <td>{{ order.status }}</td>
+                                <td>{{ order.quantity }}</td>
+                                <td>{{ order.price }}</td>
+                                <td>{{ order.get_cost }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <p class="float-right h4 mt-3">Итого {{ sm }} руб.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

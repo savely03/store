@@ -1,0 +1,30 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block title %}
+    Store - Админ-панель
+{% endblock %}
+
+{% block css %}
+    <link href="{% static "vendor/css/index.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <h1 class="my-4">Админ панель</h1>
+                <div class="list-group">
+                    <a href="{% url "create_product" %}"
+                       class="list-group-item">Добавить новый товар</a>
+                </div>
+                <div class="list-group">
+                    <a href="{% url "create_category" %}" class="list-group-item">Добавить новую категорию</a>
+                </div>
+                <div class="list-group">
+                    <a href="{% url "products" %}" class="list-group-item">Просмотреть продукты</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
